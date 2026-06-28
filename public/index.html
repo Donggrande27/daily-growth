@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daily Growth</title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace-panel">
+        <div class="brand-row">
+          <div class="brand-mark">↗</div>
+          <div>
+            <p class="eyebrow">Notion Workspace</p>
+            <h1>Daily Growth</h1>
+          </div>
+        </div>
+
+        <div class="status-grid" id="dashboard">
+          <article>
+            <span>Goals</span>
+            <strong>-</strong>
+          </article>
+          <article>
+            <span>Open Tasks</span>
+            <strong>-</strong>
+          </article>
+          <article>
+            <span>Reflections</span>
+            <strong>-</strong>
+          </article>
+        </div>
+
+        <div class="action-band">
+          <button class="active-action" data-action="plan">
+            <span class="button-icon">1</span>
+            오늘 계획 생성
+          </button>
+          <button data-action="goals">
+            <span class="button-icon">2</span>
+            목표 현황 보기
+          </button>
+          <button data-action="report">
+            <span class="button-icon">3</span>
+            주간 리포트 생성
+          </button>
+        </div>
+
+        <form class="reflection-form" id="reflectionForm">
+          <label for="reflectionText">오늘 회고</label>
+          <p class="form-hint">저장 위치: Notion Daily Growth Agent / Reflections 데이터베이스</p>
+          <textarea id="reflectionText" name="reflectionText" rows="7" placeholder="예: 오늘 Notion DB를 만들었고 API 연결 준비까지 했다. CSV에서 조금 막혔지만 해결했다. 내일은 코드 연결을 테스트해야 한다."></textarea>
+          <button type="submit">
+            <span class="button-icon">+</span>
+            회고 저장
+          </button>
+        </form>
+      </section>
+
+      <section class="result-panel" aria-live="polite">
+        <div class="week-dashboard">
+          <div class="week-copy">
+            <p class="eyebrow">This Week</p>
+            <h2 id="weekTitle">이번 주 실행 캘린더</h2>
+            <p id="weekSummary">Notion Tasks에서 이번 주 할 일을 불러오는 중입니다.</p>
+          </div>
+          <div class="week-metrics">
+            <article>
+              <span>Week Tasks</span>
+              <strong id="weekTotal">-</strong>
+            </article>
+            <article>
+              <span>Open</span>
+              <strong id="weekOpen">-</strong>
+            </article>
+          </div>
+          <div class="week-calendar" id="weekCalendar"></div>
+          <div class="week-focus">
+            <h3>이번 주 먼저 볼 일</h3>
+            <ol id="weekFocusList">
+              <li>Notion 데이터를 불러오는 중입니다.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="result-header">
+          <p class="eyebrow">Daily Brief</p>
+          <h2 id="resultTitle">준비 완료</h2>
+        </div>
+        <p id="resultSummary" class="result-summary">왼쪽 버튼을 누르면 Notion 데이터를 읽고 규칙 기반으로 설명을 생성합니다.</p>
+        <pre id="resultText">앱을 열면 이번 주 캘린더가 자동으로 표시됩니다.</pre>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
