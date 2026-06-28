@@ -13,6 +13,11 @@ const weekCalendarEl = document.querySelector("#weekCalendar");
 const weekFocusListEl = document.querySelector("#weekFocusList");
 const overdueCountEl = document.querySelector("#overdueCount");
 const overdueListEl = document.querySelector("#overdueList");
+const prevWeekBtn = document.querySelector("#prevWeekBtn");
+const currentWeekBtn = document.querySelector("#currentWeekBtn");
+const nextWeekBtn = document.querySelector("#nextWeekBtn");
+
+let selectedWeekStart = startOfWeek(new Date());
 
 const endpoints = {
   plan: "/api/plan",
@@ -27,6 +32,21 @@ for (const button of document.querySelectorAll("[data-action]")) {
     await runAgentAction(button.dataset.action);
   });
 }
+
+prevWeekBtn.addEventListener("click", async () => {
+  selectedWeekStart = addDays(selectedWeekStart, -7);
+  await loadWeek();
+});
+
+currentWeekBtn.addEventListener("click", async () => {
+  selectedWeekStart = startOfWeek(new Date());
+  await loadWeek();
+});
+
+nextWeekBtn.addEventListener("click", async () => {
+  selectedWeekStart = addDays(selectedWeekStart, 7);
+  await loadWeek();
+});
 
 reflectionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -127,7 +147,7 @@ async function loadDashboard() {
 
 async function loadWeek() {
   try {
-    const response = await fetch("/api/week");
+    const response = await fetch(`/api/week?start=${toISODate(selectedWeekStart)}`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error);
 
@@ -227,6 +247,27 @@ function setBusy(isBusy) {
   for (const button of buttons) {
     button.disabled = isBusy;
   }
+}
+
+function startOfWeek(date) {
+  const copy = new Date(date);
+  copy.setHours(0, 0, 0, 0);
+  const day = copy.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  copy.setDate(copy.getDate() + diff);
+  return copy;
+}
+
+function addDays(date, days) {
+  const copy = new Date(date);
+  copy.setDate(copy.getDate() + days);
+  return copy;
+}
+
+function toISODate(date) {
+  const copy = new Date(date);
+  copy.setMinutes(copy.getMinutes() - copy.getTimezoneOffset());
+  return copy.toISOString().slice(0, 10);
 }
 
 function escapeHtml(value) {
