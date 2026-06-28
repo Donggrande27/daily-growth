@@ -205,6 +205,57 @@ textarea {
   font-size: 0.84rem;
 }
 
+.overdue-panel {
+  grid-column: 1 / -1;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.overdue-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.overdue-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.overdue-heading strong {
+  display: inline-grid;
+  place-items: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fbfbfa;
+  font-size: 1.2rem;
+}
+
+.overdue-panel ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.overdue-panel li {
+  line-height: 1.45;
+}
+
+.overdue-panel li span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
 .brand-row {
   display: flex;
   align-items: center;

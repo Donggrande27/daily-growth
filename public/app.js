@@ -11,11 +11,14 @@ const weekTotalEl = document.querySelector("#weekTotal");
 const weekOpenEl = document.querySelector("#weekOpen");
 const weekCalendarEl = document.querySelector("#weekCalendar");
 const weekFocusListEl = document.querySelector("#weekFocusList");
+const overdueCountEl = document.querySelector("#overdueCount");
+const overdueListEl = document.querySelector("#overdueList");
 
 const endpoints = {
   plan: "/api/plan",
   goals: "/api/goals",
-  report: "/api/report"
+  report: "/api/report",
+  overdue: "/api/overdue"
 };
 
 for (const button of document.querySelectorAll("[data-action]")) {
@@ -44,7 +47,7 @@ reflectionForm.addEventListener("submit", async (event) => {
     body: JSON.stringify({ text })
   });
   reflectionText.value = "";
-  await Promise.all([loadDashboard(), loadWeek()]);
+  await Promise.all([loadDashboard(), loadWeek(), loadOverdue()]);
 });
 
 async function runAgentAction(action) {
@@ -160,6 +163,36 @@ function renderWeek(data) {
     .join("");
 }
 
+async function loadOverdue() {
+  try {
+    const response = await fetch("/api/overdue");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    renderOverdue(data);
+  } catch (error) {
+    overdueCountEl.textContent = "-";
+    overdueListEl.innerHTML = `<li>${escapeHtml(error.message || "지난 기한 작업을 불러오지 못했습니다.")}</li>`;
+  }
+}
+
+function renderOverdue(data) {
+  overdueCountEl.textContent = data.total ?? 0;
+
+  if (!data.tasks?.length) {
+    overdueListEl.innerHTML = "<li>지난 기한의 미완료 작업이 없습니다.</li>";
+    return;
+  }
+
+  overdueListEl.innerHTML = data.tasks
+    .slice(0, 5)
+    .map((task) => {
+      const daysLate = task.daysLate === 1 ? "1일 지남" : `${task.daysLate}일 지남`;
+      const priority = task.priority || "우선순위 없음";
+      return `<li><strong>${escapeHtml(task.name)}</strong><span>${escapeHtml(task.dueDate)} · ${escapeHtml(daysLate)} · ${escapeHtml(priority)}</span></li>`;
+    })
+    .join("");
+}
+
 function renderDay(day) {
   const tasks = day.tasks.length
     ? day.tasks.map((task) => `<div class="calendar-task ${task.done ? "done" : ""}" title="${escapeHtml(task.name)}">${escapeHtml(task.name)}</div>`).join("")
@@ -205,4 +238,4 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-Promise.all([loadDashboard(), loadWeek()]);
+Promise.all([loadDashboard(), loadWeek(), loadOverdue()]);
