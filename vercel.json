@@ -1,13 +1,9 @@
 {
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs22.x"
-    }
-  },
+  "version": 2,
   "rewrites": [
     {
       "source": "/",
-      "destination": "/public/index.html"
+      "destination": "/index.html"
     }
   ]
 }
