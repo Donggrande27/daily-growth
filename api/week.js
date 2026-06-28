@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     const topTasks = [...openTasks].sort((a, b) => b.score - a.score).slice(0, 5);
 
     return {
-      title: titleForWeek(startIso, endIso, today),
+      title: titleForWeek(startIso, today),
       summary: `${startIso}부터 ${endIso}까지의 Notion Tasks를 Due Date 기준으로 정리했습니다.`,
       weekStart: startIso,
       weekEnd: endIso,
@@ -89,10 +89,10 @@ function dateFromRequest(req) {
   return parseISODate(start);
 }
 
-function titleForWeek(startIso, endIso, today) {
+function titleForWeek(startIso, today) {
   const currentStart = toISODate(startOfWeek(today));
   if (startIso === currentStart) return "이번 주 실행 캘린더";
-  return `${startIso} ~ ${endIso} 실행 캘린더`;
+  return "실행 캘린더";
 }
 
 function startOfWeek(date) {

@@ -16,6 +16,7 @@ const overdueListEl = document.querySelector("#overdueList");
 const prevWeekBtn = document.querySelector("#prevWeekBtn");
 const currentWeekBtn = document.querySelector("#currentWeekBtn");
 const nextWeekBtn = document.querySelector("#nextWeekBtn");
+const weekJumpInput = document.querySelector("#weekJumpInput");
 
 let selectedWeekStart = startOfWeek(new Date());
 
@@ -45,6 +46,12 @@ currentWeekBtn.addEventListener("click", async () => {
 
 nextWeekBtn.addEventListener("click", async () => {
   selectedWeekStart = addDays(selectedWeekStart, 7);
+  await loadWeek();
+});
+
+weekJumpInput.addEventListener("change", async () => {
+  if (!weekJumpInput.value) return;
+  selectedWeekStart = startOfWeek(parseISODate(weekJumpInput.value));
   await loadWeek();
 });
 
@@ -169,6 +176,7 @@ function renderWeek(data) {
   weekTotalEl.textContent = data.totalTasks ?? "-";
   weekOpenEl.textContent = data.openTasks ?? "-";
   weekCalendarEl.innerHTML = data.days.map(renderDay).join("");
+  weekJumpInput.value = data.weekStart || toISODate(selectedWeekStart);
 
   if (!data.topTasks.length) {
     weekFocusListEl.innerHTML = "<li>이번 주 미완료 작업이 없습니다.</li>";
@@ -268,6 +276,11 @@ function toISODate(date) {
   const copy = new Date(date);
   copy.setMinutes(copy.getMinutes() - copy.getTimezoneOffset());
   return copy.toISOString().slice(0, 10);
+}
+
+function parseISODate(value) {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
 function escapeHtml(value) {

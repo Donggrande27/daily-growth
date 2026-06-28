@@ -26,7 +26,8 @@ body {
 }
 
 button,
-textarea {
+textarea,
+input {
   font: inherit;
 }
 
@@ -76,6 +77,7 @@ textarea {
 .week-nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
   margin-top: 14px;
 }
@@ -87,6 +89,26 @@ textarea {
   color: var(--muted);
   font-size: 0.82rem;
   font-weight: 750;
+}
+
+.week-jump {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  padding-left: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.week-jump input {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #ffffff;
+  color: var(--ink);
 }
 
 .week-metrics {
@@ -131,7 +153,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: #fbfbfa;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .calendar-day.today {
@@ -171,11 +193,9 @@ textarea {
   color: var(--ink);
   font-size: 0.74rem;
   font-weight: 700;
-  line-height: 1.25;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.32;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
 }
 
 .calendar-task.done {
@@ -440,7 +460,8 @@ textarea {
 }
 
 textarea:focus,
-button:focus {
+button:focus,
+input:focus {
   outline: 3px solid rgba(35, 131, 226, 0.18);
   outline-offset: 2px;
 }
